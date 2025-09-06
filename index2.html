@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="ClubJoin ist die moderne Vereins-App: Mitgliederverwaltung, Kommunikation und Events – DSGVO-konform und einfach.">
+    <meta name="keywords" content="Verein, Vereinssoftware, Club, Mitgliederverwaltung, Vereinsapp, Organisation">
+    <meta name="author" content="ClubJoin Team">
+    <meta property="og:title" content="ClubJoin – Vereine einfach digital managen">
+    <meta property="og:description" content="Die App, die Vereine digital, einfach und sicher organisiert.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://deinedomain.de/assets/clubjoin_preview.png">
+    <meta property="og:url" content="https://deinedomain.de">
+
+    <!-- JSON-LD Strukturierte Daten -->
+    <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "ClubJoin",
+    "operatingSystem": "iOS, Android, Web",
+    "applicationCategory": "ProductivityApplication",
+    "description": "ClubJoin ist die moderne Vereins-App: Mitgliederverwaltung, Kommunikation und Events – DSGVO-konform und einfach.",
+    "url": "https://deinedomain.de",
+    "creator": {
+      "@type": "Organization",
+      "name": "ClubJoin",
+      "url": "https://deinedomain.de"
+    }
+  }
+  </script>
+    <title>ClubJoin – Die Zukunft für Vereine ist digital</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #dc474b;
+            --primary-dark: #b8383b;
+            --primary-light: #ff5a5f;
+            --accent: #6B8E5A;
+            --accent-light: #87A96B;
+            --black: #1A1A1A;
+            --dark-gray: #2D2D2D;
+            --medium-gray: #666666;
+            --light-gray: #E5E5E5;
+            --white: #FFFFFF;
+            --cream: #FAFAFA;
+            --success: #10B981;
+            --warning: #F59E0B;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            overflow-x: hidden;
+            background: var(--white);
+        }
+
+        /* Improved Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container.scrolled {
+            padding: 10px 5%;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-links a:not(.nav-cta-button):hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:not(.nav-cta-button)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:not(.nav-cta-button):hover::after {
+            width: 100%;
+        }
+
+        .nav-cta-button {
+            background: var(--primary) !important;
+            color: var(--white) !important;
+            padding: 12px 24px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .nav-cta-button:hover {
+            background: var(--primary-dark) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 71, 75, 0.3);
+        }
+
+        /* Mobile menu toggle */
+        .mobile-menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .mobile-menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--dark-gray);
+            transition: all 0.3s ease;
+        }
+
+        /* Enhanced Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 5% 80px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-text {
+            color: var(--white);
+        }
+
+        .hero-text h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-text .subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            margin-bottom: 24px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .hero-text .description {
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: var(--white);
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 32px;
+            background: transparent;
+            color: var(--white);
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* Live Joiner Counter */
+        .joiner-counter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: slideInUp 0.8s ease 0.3s both;
+        }
+
+        .joiner-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--white);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .joiner-text {
+            color: var(--white);
+            font-weight: 600;
+            opacity: 0.9;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .joiner-pulse {
+            width: 12px;
+            height: 12px;
+            background: #4ade80;
+            border-radius: 50%;
+            position: relative;
+            animation: pulse-live 2s ease-in-out infinite;
+        }
+
+        .joiner-pulse::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: #4ade80;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: pulse-ring 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-live {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(2.5);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Hero Visual */
+        .hero-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .phone-mockup {
+            width: 320px;
+            height: 640px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 45px;
+            padding: 25px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25);
+            position: relative;
+            transform: rotate(-5deg);
+            animation: float 6s ease-in-out infinite;
+            border: 2px solid #dee2e6;
+        }
+
+        .phone-mockup::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 5px;
+            background: #6c757d;
+            border-radius: 3px;
+        }
+
+        .phone-mockup::after {
+            content: '';
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            border: 2px solid #6c757d;
+            border-radius: 50%;
+            background: transparent;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border-radius: 35px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-align: center;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .phone-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 35px;
+            transition: transform 0.3s ease;
+        }
+
+        .phone-mockup:hover .phone-screen img {
+            transform: scale(1.02);
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--white);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: rotate(-5deg) translateY(0px);
+            }
+
+            50% {
+                transform: rotate(-5deg) translateY(-20px);
+            }
+        }
+
+        /* Floating elements */
+        .floating-element {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: floatAround 8s linear infinite;
+        }
+
+        .floating-element:nth-child(1) {
+            width: 60px;
+            height: 60px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .floating-element:nth-child(2) {
+            width: 40px;
+            height: 40px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .floating-element:nth-child(3) {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 5%;
+            animation-delay: 4s;
+        }
+
+        @keyframes floatAround {
+            0% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+
+            100% {
+                transform: translateY(0px) rotate(360deg);
+            }
+        }
+
+        /* Social Proof Section */
+        .social-proof {
+            padding: 60px 5%;
+            background: var(--cream);
+            text-align: center;
+        }
+
+        .social-proof h3 {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: var(--medium-gray);
+            margin-top: 8px;
+        }
+
+        /* Enhanced Features Section */
+        .features {
+            padding: 120px 5%;
+            background: var(--white);
+        }
+
+        .features-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 80px;
+        }
+
+        .features-header h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--black);
+        }
+
+        .features-header p {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            line-height: 1.6;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--light-gray);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
+            transform-origin: left;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            border-radius: 20px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--white);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: var(--black);
+            font-weight: 700;
+        }
+
+        .feature-card p {
+            color: var(--medium-gray);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* App Preview Section */
+        .app-preview {
+            padding: 120px 5%;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--light-gray) 100%);
+        }
+
+        .app-preview-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .preview-content h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 24px;
+            color: var(--black);
+        }
+
+        .preview-content p {
+            font-size: 1.2rem;
+            color: var(--medium-gray);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 40px;
+        }
+
+        .feature-list li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            font-size: 1.1rem;
+            color: var(--dark-gray);
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            background: var(--success);
+            color: var(--white);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .preview-phones {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .preview-phone {
+            width: 220px;
+            height: 440px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 35px;
+            padding: 20px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+            transform: rotate(2deg);
+            transition: all 0.3s ease;
+            border: 2px solid #dee2e6;
+            position: relative;
+        }
+
+        .preview-phone:nth-child(2) {
+            transform: rotate(-2deg) translateY(20px);
+        }
+
+        .preview-phone:nth-child(3) {
+            transform: rotate(1deg) translateY(-10px);
+        }
+
+        .preview-phone:hover {
+            transform: rotate(0deg) translateY(-10px) scale(1.05);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+        }
+
+        .preview-phone::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 4px;
+            background: #6c757d;
+            border-radius: 2px;
+        }
+
+        .preview-phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            border-radius: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-phone-screen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 25px;
+            transition: transform 0.3s ease;
+        }
+
+        .preview-phone:hover .preview-phone-screen img {
+            transform: scale(1.02);
+        }
+
+        /* Enhanced Roadmap */
+        .roadmap {
+            padding: 120px 5%;
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .roadmap-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .roadmap-header h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .roadmap-header p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .timeline {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary), var(--accent));
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            padding: 32px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            background: var(--primary);
+            border: 4px solid var(--white);
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 0 20px rgba(220, 71, 75, 0.5);
+        }
+
+        .timeline-content h3 {
+            color: var(--white);
+            margin-bottom: 12px;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .timeline-content p {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .final-cta {
+            padding: 120px 5%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            text-align: center;
+            color: var(--white);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="2" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+        }
+
+        .final-cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .final-cta p {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .email-signup {
+            display: flex;
+            gap: 16px;
+            max-width: 500px;
+            margin: 0 auto 40px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+        }
+
+        .email-signup input {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .email-signup input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .email-signup button {
+            padding: 16px 32px;
+            background: var(--white);
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .email-signup button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Email Signup Section */
+        .signup-section {
+            padding: 100px 5%;
+            background: var(--accent);
+            text-align: center;
+            color: var(--white);
+        }
+
+        .signup-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .signup-section h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .signup-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .signup-form-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .signup-form {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .form-group input[type="email"] {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--dark-gray);
+            font-size: 1rem;
+            font-weight: 500;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input[type="email"]:focus {
+            border-color: var(--white);
+            background: var(--white);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .form-group input[type="email"]::placeholder {
+            color: var(--medium-gray);
+        }
+
+        .form-group button {
+            padding: 15px 30px;
+            background: var(--white);
+            color: var(--accent);
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 180px;
+        }
+
+        .form-group button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.3);
+        }
+
+        .form-group button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .gdpr-consent {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            line-height: 1.6;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkmark {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            border-radius: 4px;
+            position: relative;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .checkmark {
+            background: var(--white);
+            border-color: var(--white);
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .checkmark::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .consent-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .privacy-link {
+            color: var(--white);
+            text-decoration: underline;
+            transition: opacity 0.3s ease;
+        }
+
+        .privacy-link:hover {
+            opacity: 0.8;
+        }
+
+        .success-message, .error-message {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .success-icon, .error-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .success-message h3, .error-message h3 {
+            margin-bottom: 15px;
+            color: var(--white);
+        }
+
+        .success-message p, .error-message p {
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 5% 30px;
+            background: var(--black);
+            color: var(--white);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        .footer-brand p {
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .footer-column h4 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+            color: var(--white);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column ul li a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 30px;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .app-preview-container {
+                grid-template-columns: 1fr;
+                gap: 60px;
+                text-align: center;
+            }
+
+            .preview-phones {
+                order: -1;
+                gap: 40px;
+            }
+
+            .preview-phone {
+                width: 250px;
+                height: 480px;
+                transform: rotate(0deg) !important;
+            }
+
+            .preview-phone:nth-child(2) {
+                transform: rotate(0deg) translateY(0px) !important;
+            }
+
+            .preview-phone:nth-child(3) {
+                transform: rotate(0deg) translateY(0px) !important;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-toggle {
+                display: flex;
+            }
+
+            .hero-content {
+                padding: 100px 5% 60px;
+            }
+
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+            }
+
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px;
+            }
+
+            .timeline-marker {
+                left: 20px;
+            }
+
+            .email-signup {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .preview-phones {
+                flex-direction: column;
+                gap: 25px;
+            }
+
+            .preview-phone {
+                width: 200px;
+                height: 400px;
+                transform: rotate(0deg) !important;
+            }
+
+            .phone-mockup {
+                width: 250px;
+                height: 500px;
+            }
+
+            .form-group {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .form-group button {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .signup-form {
+                padding: 30px 20px;
+            }
+            
+            .joiner-counter {
+                flex-direction: column;
+                gap: 8px;
+                padding: 12px 20px;
+            }
+            
+            .joiner-number {
+                font-size: 1.5rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .phone-mockup {
+                width: 250px;
+                height: 500px;
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .fade-in:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .fade-in:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .fade-in:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--light-gray);
+            z-index: 9999;
+        }
+
+        .scroll-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-indicator">
+        <div class="scroll-progress" id="scrollProgress"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav-container" id="navbar">
+        <div class="logo">
+            <img src="assets/logo-group.svg" alt="ClubJoin Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#preview">App</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="#signup" class="nav-cta-button">Früh-Zugang</a></li>
+        </ul>
+        <div class="mobile-menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Die digitale Zukunft für deinen Verein</h1>
+                <p class="subtitle">Weil Communities mehr verdienen als Schaukasten-Zettel von 1998!</p>
+                <div class="joiner-counter">
+                    <span class="joiner-number" id="joinerCount">27</span>
+                    <span class="joiner-text">Early Adopters dabei</span>
+                    <div class="joiner-pulse"></div>
+                </div>
+                <p class="description">
+                    Schluss mit Zettelwirtschaft und veralteten Prozessen. ClubJoin digitalisiert Vereinsmanagement und
+                    macht Communities sichtbar – modern, effizient und DSGVO-konform.
+                </p>
+                <div class="cta-buttons">
+                    <a href="#preview" class="btn-primary">
+                        <span>📱</span>
+                        App entdecken
+                    </a>
+                    <a href="#signup" class="btn-secondary">
+                        <span>🚀</span>
+                        Früh-Zugang sichern
+                    </a>
+                </div>
+            </div>
+
+            <div class="hero-visual">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <img width="250" src="assets/search.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <h3>Vertrauen durch Zahlen</h3>
+        <div class="stats-grid">
+            <div class="stat-item fade-in">
+                <span class="stat-number">20+</span>
+                <span class="stat-label">Joiner interessiert</span>
+            </div>
+            <div class="stat-item fade-in">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">DSGVO-konform</span>
+            </div>
+            <div class="stat-item fade-in">
+                <span class="stat-number">2025</span>
+                <span class="stat-label">Launch geplant</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="features-header">
+            <h2>Vereinsmanagement ohne Kopfschmerzen</h2>
+            <p>ClubJoin löst die größten Herausforderungen im Vereinsalltag mit smarten, benutzerfreundlichen Tools.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📱</div>
+                <h3>Digitale Flyer</h3>
+                <p>Schluss mit Papierchaos! Erstelle und teile ansprechende digitale Flyer, die wirklich ankommen.
+                    Modern, nachhaltig und immer aktuell – für maximale Reichweite in der Community.</p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📋</div>
+                <h3>Smart Wartelisten</h3>
+                <p>Keine Zettelwirtschaft mehr! Verwalte Wartelisten digital, transparent und effizient. Automatische
+                    Benachrichtigungen und alle Infos auf einen Blick – für Vereine und Mitglieder.</p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <div class="feature-icon">⚡</div>
+                <h3>Easy Join</h3>
+                <p>Mitgliedsanmeldungen so einfach wie ein Like – natürlich DSGVO-konform. In wenigen Klicks zum neuen
+                    Mitglied, ohne Papierkram und komplizierte Prozesse.</p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🔒</div>
+                <h3>Datenschutz First</h3>
+                <p>100% DSGVO-konform und sicher. Deine Vereinsdaten sind bei uns in besten Händen – mit deutschen
+                    Servern und höchsten Sicherheitsstandards.</p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <div class="feature-icon">📊</div>
+                <h3>Community Insights</h3>
+                <p>Verstehe deine Community besser mit detaillierten Analytics. Wer ist aktiv? Was funktioniert?
+                    Datenbasierte Entscheidungen für erfolgreiches Vereinsmanagement.</p>
+            </div>
+
+            <div class="feature-card fade-in">
+                <div class="feature-icon">🌐</div>
+                <h3>Vernetzte Vereine</h3>
+                <p>Entdecke andere Vereine in deiner Region. Kooperationen fördern, Events teilen und gemeinsam die
+                    lokale Community stärken – digital vernetzt, lokal verwurzelt.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- App Preview Section -->
+    <section id="preview" class="app-preview">
+        <div class="app-preview-container">
+            <div class="preview-content">
+                <h2>Die App, die Vereine lieben werden</h2>
+                <p>Intuitive Bedienung trifft auf leistungsstarke Features. ClubJoin wurde speziell für die Bedürfnisse
+                    moderner Vereine entwickelt.</p>
+
+                <ul class="feature-list">
+                    <li>Einfaches Onboarding in unter 5 Minuten</li>
+                    <li>Offline-Funktionen für Events ohne Internet</li>
+                    <li>Multi-Plattform: iOS, Android & Web</li>
+                    <li>Automatische Backups und Synchronisation</li>
+                    <li>KI Planungsassistenten</li>
+                    <li>24/7 Support in deutscher Sprache</li>
+                </ul>
+
+                <div class="cta-buttons">
+                    <a href="mailto:info@clubjoin.de" class="btn-primary">
+                        Demo anfragen
+                    </a>
+                </div>
+            </div>
+
+            <div class="preview-phones">
+                <div class="preview-phone">
+                    <div class="preview-phone-screen">
+                        <img width="175" src="assets/club.png">
+                    </div>
+                </div>
+                <div class="preview-phone">
+                    <div class="preview-phone-screen">
+
+                        <img width="175" src="assets/members.png">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="roadmap">
+        <div class="roadmap-header">
+            <h2>Roadmap 2025 – Next Level Community</h2>
+            <p>Unser Weg zur digitalen Revolution im Vereinswesen</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>🚀 Kickstart Capital</h3>
+                    <p>Aufbau eines starken Investorennetzwerks für nachhaltiges Wachstum und innovative
+                        Vereinslösungen.</p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>🔑 One Key to Join</h3>
+                    <p>Nahtlose User Experience durch Single Sign-On & Identity Management für alle Vereinsaktivitäten.
+                    </p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>💡 Smart Value</h3>
+                    <p>Einführung eines skalierbaren Pricing-Modells für maximale Marktadaption und faire
+                        Kostenstruktur.</p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>🌍 Go Live Local</h3>
+                    <p>Pilotierung in ersten Städten mit Fokus auf Community-Building und organische Nutzerakquise.</p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>🤝 ClubConnect</h3>
+                    <p>Aufbau strategischer Partner-Ökosysteme und nahtlose API-Integration mit bestehenden Systemen.
+                    </p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-content">
+                    <h3>📊 Community Pulse</h3>
+                    <p>Echtzeit-Analytics und KI-gestützte Insights für optimierte Mitgliederbindung und Vereinsführung.
+                    </p>
+                </div>
+                <div class="timeline-marker"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Email Signup Section -->
+    <section id="signup" class="signup-section">
+        <div class="signup-container">
+            <h2>👉 Bereit für die digitale Vereins-Zukunft?</h2>
+            <p class="signup-subtitle">
+                Sei unter den Ersten und erhalte exklusive Updates zum Start!
+            </p>
+
+            <div class="signup-form-container">
+                <form id="emailSignupForm" class="signup-form">
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Deine E-Mail Adresse" required>
+                        <button type="submit" id="submitBtn">
+                            <span class="btn-text">Früh-Zugang sichern</span>
+                            <span class="btn-loading" style="display: none;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                                        <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
+                                        <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
+                                    </circle>
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="gdpr-consent">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="gdprConsent" required>
+                            <span class="checkmark"></span>
+                            <span class="consent-text">
+                                Ich bin damit einverstanden, dass meine E-Mail-Adresse zum Versand von Informationen über ClubJoin verwendet wird. 
+                                Die Daten werden DSGVO-konform verarbeitet und können jederzeit widerrufen werden.
+                                <a href="#privacy" class="privacy-link">Datenschutzerklärung</a>
+                            </span>
+                        </label>
+                    </div>
+                </form>
+                <div id="successMessage" class="success-message" style="display: none;">
+                    <div class="success-icon">✅</div>
+                    <h3>Willkommen im ClubJoin Early Access!</h3>
+                    <p>Du bist jetzt dabei! Wir melden uns mit exklusiven Updates.</p>
+                </div>
+                <div id="errorMessage" class="error-message" style="display: none;">
+                    <div class="error-icon">❌</div>
+                    <h3>Oops! Da ist etwas schiefgelaufen.</h3>
+                    <p id="errorText">Bitte versuche es später noch einmal.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <h3>ClubJoin</h3>
+                <p>Die digitale Zukunft für Vereine. Wir digitalisieren das Vereinswesen und stärken lokale Communities
+                    durch moderne Technologie.</p>
+                <div class="social-links">
+                    <a href="mailto:info@clubjoin.de" title="E-Mail">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 2v.01L12 13 20 6.01V6H4zm0 12h16V8l-8 7-8-7v10z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/todo" title="LinkedIn">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 5 2.12 5 3.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.1c.5-.9 1.7-2.2 3.6-2.2 3.9 0 4.6 2.6 4.6 6V24h-4v-7.9c0-1.9 0-4.4-2.7-4.4-2.7 0-3.1 2.1-3.1 4.2V24h-4V8z" />
+                        </svg>
+                    </a>
+                    <a href="https://www.instagram.com/clubjoin.io" title="Instagram">
+                        <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm10 2c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.8-.9a1.1 1.1 0 11-2.2 0 1.1 1.1 0 012.2 0z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-column">
+                <h4>Produkt</h4>
+                <ul>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#preview">App Preview</a></li>
+                    <li><a href="#roadmap">Roadmap</a></li>
+                    <li><a href="mailto:info@clubjoin.de">Preise</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Unternehmen</h4>
+                <ul>
+                    <li><a href="mailto:info@clubjoin.de">Über uns</a></li>
+                    <li><a href="mailto:info@clubjoin.de">Karriere</a></li>
+                    <li><a href="mailto:info@clubjoin.de">Presse</a></li>
+                    <li><a href="mailto:info@clubjoin.de">Kontakt</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-column">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="mailto:info@clubjoin.de">Datenschutz</a></li>
+                    <li><a href="mailto:info@clubjoin.de">Impressum</a></li>
+                    <li><a href="mailto:info@clubjoin.de">AGB</a></li>
+                    <li><a href="mailto:info@clubjoin.de">Cookie-Policy</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 ClubJoin. Alle Rechte vorbehalten. Made with ❤️ for Communities.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('navbar');
+            const scrollProgress = document.getElementById('scrollProgress');
+
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+
+            // Update scroll progress
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Email signup functionality
+        document.querySelector('.email-signup button').addEventListener('click', function (e) {
+            e.preventDefault();
+            const email = document.querySelector('.email-signup input').value;
+            if (email) {
+                // Hier würde normalerweise ein API-Call stattfinden
+                alert('Vielen Dank! Wir melden uns bei dir, sobald der Early Access verfügbar ist.');
+                document.querySelector('.email-signup input').value = '';
+            }
+        });
+
+        // Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Mobile menu toggle (basic implementation)
+        document.querySelector('.mobile-menu-toggle').addEventListener('click', function () {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Supabase Configuration
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL'
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'
+        
+        // Initialize Supabase (these will need to be replaced with real credentials)
+        let supabase = null;
+        
+        try {
+            if (typeof window.supabase !== 'undefined') {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+            }
+        } catch (error) {
+            console.log('Supabase not configured yet. Using localStorage fallback.')
+        }
+
+        // Live counter functionality
+        let currentCount = 27;
+        
+        function updateJoinerCount() {
+            const countElement = document.getElementById('joinerCount');
+            if (countElement) {
+                countElement.textContent = currentCount;
+            }
+        }
+
+        // Simulate live updates (every 15-30 seconds add 1 randomly)
+        function simulateLiveUpdates() {
+            setInterval(() => {
+                if (Math.random() < 0.3) { // 30% chance every interval
+                    currentCount++;
+                    updateJoinerCount();
+                    
+                    // Store in localStorage
+                    localStorage.setItem('clubjoin_count', currentCount.toString());
+                }
+            }, Math.random() * 15000 + 15000); // 15-30 seconds
+        }
+
+        // Load saved count or start simulation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved count
+            const savedCount = localStorage.getItem('clubjoin_count');
+            if (savedCount) {
+                currentCount = parseInt(savedCount);
+                updateJoinerCount();
+            }
+            
+            // Start live simulation
+            simulateLiveUpdates();
+            
+            // Email form handling
+            const form = document.getElementById('emailSignupForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const btnLoading = submitBtn.querySelector('.btn-loading');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('email').value;
+                    const gdprConsent = document.getElementById('gdprConsent').checked;
+                    
+                    if (!email || !gdprConsent) {
+                        showError('Bitte fülle alle Felder aus und stimme der DSGVO-Erklärung zu.');
+                        return;
+                    }
+
+                    // Show loading state
+                    submitBtn.disabled = true;
+                    btnText.style.display = 'none';
+                    btnLoading.style.display = 'flex';
+
+                    try {
+                        let success = false;
+                        
+                        if (supabase) {
+                            // Try Supabase
+                            const { data, error } = await supabase
+                                .from('early_access_signups')
+                                .insert([
+                                    {
+                                        email: email,
+                                        gdpr_consent: true,
+                                        signup_date: new Date().toISOString(),
+                                        source: 'landing_page'
+                                    }
+                                ]);
+                            
+                            if (error) {
+                                console.error('Supabase error:', error);
+                                // Fallback to localStorage
+                                success = saveToLocalStorage(email);
+                            } else {
+                                success = true;
+                            }
+                        } else {
+                            // Fallback to localStorage
+                            success = saveToLocalStorage(email);
+                        }
+
+                        if (success) {
+                            // Update counter
+                            currentCount++;
+                            updateJoinerCount();
+                            localStorage.setItem('clubjoin_count', currentCount.toString());
+                            
+                            // Show success
+                            form.style.display = 'none';
+                            successMessage.style.display = 'block';
+                        } else {
+                            showError('Diese E-Mail-Adresse ist bereits registriert.');
+                        }
+                        
+                    } catch (error) {
+                        console.error('Error:', error);
+                        showError('Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es später noch einmal.');
+                    } finally {
+                        // Reset button state
+                        submitBtn.disabled = false;
+                        btnText.style.display = 'block';
+                        btnLoading.style.display = 'none';
+                    }
+                });
+            }
+
+            function saveToLocalStorage(email) {
+                const signups = JSON.parse(localStorage.getItem('clubjoin_signups') || '[]');
+                
+                // Check if email already exists
+                if (signups.some(signup => signup.email === email)) {
+                    return false;
+                }
+                
+                signups.push({
+                    email: email,
+                    gdpr_consent: true,
+                    signup_date: new Date().toISOString(),
+                    source: 'landing_page'
+                });
+                
+                localStorage.setItem('clubjoin_signups', JSON.stringify(signups));
+                return true;
+            }
+
+            function showError(message) {
+                if (errorText && errorMessage) {
+                    errorText.textContent = message;
+                    errorMessage.style.display = 'block';
+                    setTimeout(() => {
+                        errorMessage.style.display = 'none';
+                    }, 5000);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
