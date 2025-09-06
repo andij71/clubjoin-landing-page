@@ -270,49 +270,27 @@
             transform: translateY(-2px);
         }
 
-        /* Live Joiner Counter */
-        .joiner-counter {
-            display: flex;
+        /* Live Stats Counter */
+        .live-counter {
+            position: relative;
+            display: flex !important;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin: 25px 0;
-            padding: 15px 30px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            max-width: 300px;
-            margin-left: auto;
-            margin-right: auto;
-            animation: slideInUp 0.8s ease 0.3s both;
+            gap: 10px;
         }
 
-        .joiner-number {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--white);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .joiner-text {
-            color: var(--white);
-            font-weight: 600;
-            opacity: 0.9;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
-        }
-
-        .joiner-pulse {
-            width: 12px;
-            height: 12px;
+        .stat-pulse {
+            width: 8px;
+            height: 8px;
             background: #4ade80;
             border-radius: 50%;
-            position: relative;
+            position: absolute;
+            top: 5px;
+            right: -15px;
             animation: pulse-live 2s ease-in-out infinite;
         }
 
-        .joiner-pulse::before {
+        .stat-pulse::before {
             content: '';
             position: absolute;
             top: -2px;
@@ -326,8 +304,15 @@
         }
 
         @keyframes pulse-live {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
         }
 
         @keyframes pulse-ring {
@@ -335,6 +320,7 @@
                 transform: scale(1);
                 opacity: 0.6;
             }
+
             100% {
                 transform: scale(2.5);
                 opacity: 0;
@@ -346,6 +332,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -935,7 +922,7 @@
         /* Email Signup Section */
         .signup-section {
             padding: 100px 5%;
-            background: var(--accent);
+            background: var(--primary);
             text-align: center;
             color: var(--white);
         }
@@ -1054,12 +1041,12 @@
             transition: all 0.3s ease;
         }
 
-        .checkbox-container input[type="checkbox"]:checked + .checkmark {
+        .checkbox-container input[type="checkbox"]:checked+.checkmark {
             background: var(--white);
             border-color: var(--white);
         }
 
-        .checkbox-container input[type="checkbox"]:checked + .checkmark::after {
+        .checkbox-container input[type="checkbox"]:checked+.checkmark::after {
             content: '✓';
             position: absolute;
             top: 50%;
@@ -1086,7 +1073,8 @@
             opacity: 0.8;
         }
 
-        .success-message, .error-message {
+        .success-message,
+        .error-message {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             padding: 40px;
@@ -1095,17 +1083,20 @@
             text-align: center;
         }
 
-        .success-icon, .error-icon {
+        .success-icon,
+        .error-icon {
             font-size: 3rem;
             margin-bottom: 20px;
         }
 
-        .success-message h3, .error-message h3 {
+        .success-message h3,
+        .error-message h3 {
             margin-bottom: 15px;
             color: var(--white);
         }
 
-        .success-message p, .error-message p {
+        .success-message p,
+        .error-message p {
             opacity: 0.9;
         }
 
@@ -1285,24 +1276,14 @@
                 flex-direction: column;
                 gap: 15px;
             }
-            
+
             .form-group button {
                 min-width: auto;
                 width: 100%;
             }
-            
+
             .signup-form {
                 padding: 30px 20px;
-            }
-            
-            .joiner-counter {
-                flex-direction: column;
-                gap: 8px;
-                padding: 12px 20px;
-            }
-            
-            .joiner-number {
-                font-size: 1.5rem;
             }
 
             .footer-content {
@@ -1407,11 +1388,6 @@
             <div class="hero-text">
                 <h1>Die digitale Zukunft für deinen Verein</h1>
                 <p class="subtitle">Weil Communities mehr verdienen als Schaukasten-Zettel von 1998!</p>
-                <div class="joiner-counter">
-                    <span class="joiner-number" id="joinerCount">27</span>
-                    <span class="joiner-text">Early Adopters dabei</span>
-                    <div class="joiner-pulse"></div>
-                </div>
                 <p class="description">
                     Schluss mit Zettelwirtschaft und veralteten Prozessen. ClubJoin digitalisiert Vereinsmanagement und
                     macht Communities sichtbar – modern, effizient und DSGVO-konform.
@@ -1443,8 +1419,11 @@
         <h3>Vertrauen durch Zahlen</h3>
         <div class="stats-grid">
             <div class="stat-item fade-in">
-                <span class="stat-number">20+</span>
-                <span class="stat-label">Joiner interessiert</span>
+                <div class="stat-number live-counter">
+                    <span id="joinerCount">27</span>
+                    <div class="stat-pulse"></div>
+                </div>
+                <span class="stat-label">Early Joiner dabei</span>
             </div>
             <div class="stat-item fade-in">
                 <span class="stat-number">100%</span>
@@ -1628,9 +1607,12 @@
                             <span class="btn-text">Früh-Zugang sichern</span>
                             <span class="btn-loading" style="display: none;">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" stroke-dasharray="31.416" stroke-dashoffset="31.416">
-                                        <animate attributeName="stroke-dasharray" dur="2s" values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite"/>
-                                        <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416" repeatCount="indefinite"/>
+                                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"
+                                        stroke-dasharray="31.416" stroke-dashoffset="31.416">
+                                        <animate attributeName="stroke-dasharray" dur="2s"
+                                            values="0 31.416;15.708 15.708;0 31.416" repeatCount="indefinite" />
+                                        <animate attributeName="stroke-dashoffset" dur="2s" values="0;-15.708;-31.416"
+                                            repeatCount="indefinite" />
                                     </circle>
                                 </svg>
                             </span>
@@ -1641,7 +1623,8 @@
                             <input type="checkbox" id="gdprConsent" required>
                             <span class="checkmark"></span>
                             <span class="consent-text">
-                                Ich bin damit einverstanden, dass meine E-Mail-Adresse zum Versand von Informationen über ClubJoin verwendet wird. 
+                                Ich bin damit einverstanden, dass meine E-Mail-Adresse zum Versand von Informationen
+                                über ClubJoin verwendet wird.
                                 Die Daten werden DSGVO-konform verarbeitet und können jederzeit widerrufen werden.
                                 <a href="#privacy" class="privacy-link">Datenschutzerklärung</a>
                             </span>
@@ -1800,10 +1783,10 @@
         // Supabase Configuration
         const SUPABASE_URL = 'YOUR_SUPABASE_URL'
         const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'
-        
+
         // Initialize Supabase (these will need to be replaced with real credentials)
         let supabase = null;
-        
+
         try {
             if (typeof window.supabase !== 'undefined') {
                 supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
@@ -1814,7 +1797,7 @@
 
         // Live counter functionality
         let currentCount = 27;
-        
+
         function updateJoinerCount() {
             const countElement = document.getElementById('joinerCount');
             if (countElement) {
@@ -1828,7 +1811,7 @@
                 if (Math.random() < 0.3) { // 30% chance every interval
                     currentCount++;
                     updateJoinerCount();
-                    
+
                     // Store in localStorage
                     localStorage.setItem('clubjoin_count', currentCount.toString());
                 }
@@ -1836,17 +1819,17 @@
         }
 
         // Load saved count or start simulation
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Load saved count
             const savedCount = localStorage.getItem('clubjoin_count');
             if (savedCount) {
                 currentCount = parseInt(savedCount);
                 updateJoinerCount();
             }
-            
+
             // Start live simulation
             simulateLiveUpdates();
-            
+
             // Email form handling
             const form = document.getElementById('emailSignupForm');
             const submitBtn = document.getElementById('submitBtn');
@@ -1857,12 +1840,12 @@
             const errorText = document.getElementById('errorText');
 
             if (form) {
-                form.addEventListener('submit', async function(e) {
+                form.addEventListener('submit', async function (e) {
                     e.preventDefault();
-                    
+
                     const email = document.getElementById('email').value;
                     const gdprConsent = document.getElementById('gdprConsent').checked;
-                    
+
                     if (!email || !gdprConsent) {
                         showError('Bitte fülle alle Felder aus und stimme der DSGVO-Erklärung zu.');
                         return;
@@ -1875,7 +1858,7 @@
 
                     try {
                         let success = false;
-                        
+
                         if (supabase) {
                             // Try Supabase
                             const { data, error } = await supabase
@@ -1888,7 +1871,7 @@
                                         source: 'landing_page'
                                     }
                                 ]);
-                            
+
                             if (error) {
                                 console.error('Supabase error:', error);
                                 // Fallback to localStorage
@@ -1906,14 +1889,14 @@
                             currentCount++;
                             updateJoinerCount();
                             localStorage.setItem('clubjoin_count', currentCount.toString());
-                            
+
                             // Show success
                             form.style.display = 'none';
                             successMessage.style.display = 'block';
                         } else {
                             showError('Diese E-Mail-Adresse ist bereits registriert.');
                         }
-                        
+
                     } catch (error) {
                         console.error('Error:', error);
                         showError('Ein unerwarteter Fehler ist aufgetreten. Bitte versuche es später noch einmal.');
@@ -1928,19 +1911,19 @@
 
             function saveToLocalStorage(email) {
                 const signups = JSON.parse(localStorage.getItem('clubjoin_signups') || '[]');
-                
+
                 // Check if email already exists
                 if (signups.some(signup => signup.email === email)) {
                     return false;
                 }
-                
+
                 signups.push({
                     email: email,
                     gdpr_consent: true,
                     signup_date: new Date().toISOString(),
                     source: 'landing_page'
                 });
-                
+
                 localStorage.setItem('clubjoin_signups', JSON.stringify(signups));
                 return true;
             }
