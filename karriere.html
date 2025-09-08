@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Karriere bei ClubJoin - Werde Teil unseres Teams und gestalte die Zukunft der Vereinsdigitalisierung mit.">
+    <meta name="keywords" content="Karriere, Jobs, ClubJoin, Fullstack Developer, Marketing, Startup">
+    <title>Karriere bei ClubJoin – Gestalte die Zukunft der Vereine</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #dc474b;
+            --primary-dark: #b8383b;
+            --primary-light: #ff5a5f;
+            --accent: #6B8E5A;
+            --black: #1A1A1A;
+            --dark-gray: #2D2D2D;
+            --medium-gray: #666666;
+            --light-gray: #E5E5E5;
+            --white: #FFFFFF;
+            --cream: #FAFAFA;
+            --success: #10B981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: var(--white);
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a:not(.nav-cta-button) {
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-links a:not(.nav-cta-button):hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:not(.nav-cta-button)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:not(.nav-cta-button):hover::after {
+            width: 100%;
+        }
+
+        .nav-cta-button {
+            background: var(--primary) !important;
+            color: var(--white) !important;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .nav-cta-button:hover {
+            background: var(--primary-dark) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 71, 75, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 5% 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 60px;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        /* Company Values */
+        .values-section {
+            padding: 80px 0;
+            background: var(--cream);
+            margin-bottom: 80px;
+            border-radius: 20px;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            padding: 0 40px;
+        }
+
+        .value-card {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .value-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .value-card p {
+            color: var(--medium-gray);
+            line-height: 1.6;
+        }
+
+        /* Job Listings */
+        .jobs-section {
+            margin-bottom: 80px;
+        }
+
+        .job-card {
+            background: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .job-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .job-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--black);
+            margin-bottom: 10px;
+        }
+
+        .job-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .job-tag {
+            background: var(--cream);
+            color: var(--medium-gray);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .job-tag.urgent {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .job-description {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: var(--dark-gray);
+        }
+
+        .requirements {
+            margin-bottom: 30px;
+        }
+
+        .requirements h4 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .requirements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .requirements li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+            color: var(--dark-gray);
+        }
+
+        .requirements li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .apply-button {
+            background: var(--primary);
+            color: var(--white);
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .apply-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 71, 75, 0.3);
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            background: var(--cream);
+            padding: 80px 40px;
+            border-radius: 20px;
+            margin-bottom: 80px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .benefit-item {
+            text-align: center;
+        }
+
+        .benefit-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .benefit-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--black);
+        }
+
+        .benefit-item p {
+            color: var(--medium-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Application CTA */
+        .application-cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 60px 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .application-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .application-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: var(--white);
+            color: var(--primary);
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 40px 5%;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .job-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .values-grid,
+            .benefits-grid {
+                grid-template-columns: 1fr;
+                padding: 0 20px;
+            }
+
+            .main-content {
+                padding: 60px 5%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="logo">
+            <img src="assets/logo-group.svg" alt="ClubJoin Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="index.html#preview">App</a></li>
+            <li><a href="karriere.html">Karriere</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="about.html">Über mich</a></li>
+            <li><a href="#jobs" class="nav-cta-button">Jobs ansehen</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Gestalte die Zukunft der Vereine</h1>
+        <p class="subtitle">
+            Werde Teil unseres Teams und revolutioniere das Vereinswesen in Deutschland
+        </p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Company Values -->
+        <section class="values-section">
+            <h2 class="section-title">Unsere Werte</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <span class="value-icon">🚀</span>
+                    <h3>Innovation First</h3>
+                    <p>Wir entwickeln die modernsten Lösungen für traditionelle Vereinsstrukturen und denken dabei immer
+                        einen Schritt voraus.</p>
+                </div>
+                <div class="value-card">
+                    <span class="value-icon">🤝</span>
+                    <h3>Community Spirit</h3>
+                    <p>Echte Teamarbeit und offene Kommunikation stehen bei uns im Mittelpunkt. Gemeinsam erreichen wir
+                        mehr.</p>
+                </div>
+                <div class="value-card">
+                    <span class="value-icon">💡</span>
+                    <h3>Lernkultur</h3>
+                    <p>Kontinuierliches Lernen und persönliche Weiterentwicklung sind Teil unserer DNA. Fehler sind
+                        Chancen zu wachsen.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Open Positions -->
+        <section id="jobs" class="jobs-section">
+            <h2 class="section-title">Offene Positionen</h2>
+
+            <!-- Fullstack Developer Position -->
+            <div class="job-card">
+                <div class="job-header">
+                    <div>
+                        <h3 class="job-title">Fullstack Developer</h3>
+                        <div class="job-meta">
+                            <span class="job-tag urgent">Dringend gesucht</span>
+                            <span class="job-tag">Vollzeit</span>
+                            <span class="job-tag">Remote/Hybrid</span>
+                            <span class="job-tag">€45k-65k</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="job-description">
+                    Du brennst für moderne Webtechnologien und möchtest die digitale Transformation von Vereinen
+                    vorantreiben?
+                    Als Fullstack Developer bei ClubJoin entwickelst du innovative Features für unsere Vereinsplattform
+                    und
+                    hilfst dabei, Communities digital zu vernetzen.
+                </p>
+
+                <div class="requirements">
+                    <h4>Das bringst du mit:</h4>
+                    <ul>
+                        <li>3+ Jahre Erfahrung in der Webentwicklung</li>
+                        <li>Sehr gute Kenntnisse in JavaScript/TypeScript</li>
+                        <li>Erfahrung mit React/Vue.js und Node.js</li>
+                        <li>Kenntnisse in SQL-Datenbanken (PostgreSQL bevorzugt)</li>
+                        <li>Erfahrung mit REST APIs und GraphQL</li>
+                        <li>Git, Docker und CI/CD Kenntnisse</li>
+                        <li>Startup-Mentalität und Hands-on-Attitude</li>
+                        <li>Fließend Deutsch und gute Englischkenntnisse</li>
+                    </ul>
+                </div>
+
+                <div class="requirements">
+                    <h4>Nice to have:</h4>
+                    <ul>
+                        <li>Erfahrung mit Supabase oder ähnlichen BaaS</li>
+                        <li>Mobile App Entwicklung (React Native/Flutter)</li>
+                        <li>DevOps und Cloud-Deployment (AWS/Vercel)</li>
+                        <li>UX/UI Design Verständnis</li>
+                    </ul>
+                </div>
+
+                <a href="mailto:jobs@clubjoin.io?subject=Bewerbung%20Fullstack%20Developer" class="apply-button">
+                    Jetzt bewerben
+                </a>
+            </div>
+
+            <!-- Marketing Position -->
+            <div class="job-card">
+                <div class="job-header">
+                    <div>
+                        <h3 class="job-title">Marketing Specialist</h3>
+                        <div class="job-meta">
+                            <span class="job-tag urgent">Dringend gesucht</span>
+                            <span class="job-tag">Vollzeit</span>
+                            <span class="job-tag">Remote/Vor Ort</span>
+                            <span class="job-tag">€35k-50k</span>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="job-description">
+                    Du verstehst es, komplexe Produktvorteile einfach zu kommunizieren und Communities zu begeistern?
+                    Als Marketing Specialist bei ClubJoin entwickelst du unsere Marketing-Strategie und machst ClubJoin
+                    zur ersten Wahl für Vereine in Deutschland.
+                </p>
+
+                <div class="requirements">
+                    <h4>Das bringst du mit:</h4>
+                    <ul>
+                        <li>2+ Jahre Marketing-Erfahrung, idealerweise B2B SaaS</li>
+                        <li>Sehr gute Kenntnisse in Digital Marketing</li>
+                        <li>Erfahrung mit Social Media Marketing (LinkedIn, Instagram)</li>
+                        <li>Content Creation Skills (Texte, Graphics, Videos)</li>
+                        <li>Analytics & Performance Marketing Verständnis</li>
+                        <li>Hands-on Mentalität und Startup-Mindset</li>
+                        <li>Kreativität und strategisches Denken</li>
+                        <li>Ausgezeichnete Deutsch- und gute Englischkenntnisse</li>
+                    </ul>
+                </div>
+
+                <div class="requirements">
+                    <h4>Nice to have:</h4>
+                    <ul>
+                        <li>Erfahrung im Vereins-/NGO-Bereich</li>
+                        <li>SEO/SEA Kenntnisse</li>
+                        <li>Design-Tools (Figma, Canva, Adobe Creative Suite)</li>
+                        <li>Community Building Erfahrung</li>
+                        <li>Event Marketing & PR</li>
+                    </ul>
+                </div>
+
+                <a href="mailto:jobs@clubjoin.io?subject=Bewerbung%20Marketing%20Specialist" class="apply-button">
+                    Jetzt bewerben
+                </a>
+            </div>
+        </section>
+
+        <!-- Benefits -->
+        <section class="benefits-section">
+            <h2 class="section-title">Was wir bieten</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <span class="icon">🏠</span>
+                    <h4>Remote First</h4>
+                    <p>Flexible Arbeitszeiten und Home Office als Standard</p>
+                </div>
+                <div class="benefit-item">
+                    <span class="icon">📈</span>
+                    <h4>Equity Package</h4>
+                    <p>Beteiligung am Unternehmenserfolg durch Mitarbeiteranteile</p>
+                </div>
+                <div class="benefit-item">
+                    <span class="icon">🎓</span>
+                    <h4>Weiterbildung</h4>
+                    <p>Budget für Kurse, Konferenzen und persönliche Entwicklung</p>
+                </div>
+                <div class="benefit-item">
+                    <span class="icon">💻</span>
+                    <h4>Top Equipment</h4>
+                    <p>MacBook, Monitor und alles was du für produktive Arbeit brauchst</p>
+                </div>
+                <div class="benefit-item">
+                    <span class="icon">🌴</span>
+                    <h4>30 Tage Urlaub</h4>
+                    <p>Mehr Erholung für bessere Leistung und Work-Life-Balance</p>
+                </div>
+                <div class="benefit-item">
+                    <span class="icon">🚀</span>
+                    <h4>Startup Culture</h4>
+                    <p>Flache Hierarchien, schnelle Entscheidungen, direkter Impact</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Application CTA -->
+        <section class="application-cta">
+            <h2>Keine passende Position dabei?</h2>
+            <p>
+                Wir sind immer auf der Suche nach talentierten Menschen, die unsere Mission teilen.
+                Sende uns deine Initiativbewerbung!
+            </p>
+            <a href="mailto:jobs@clubjoin.io?subject=Initiativbewerbung" class="cta-button">
+                Initiativbewerbung senden
+            </a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 ClubJoin. Made with ❤️ for Communities.</p>
+        <p style="margin-top: 10px; opacity: 0.8;">
+            <a href="index.html" style="color: var(--white); margin-right: 20px;">Zurück zur Hauptseite</a>
+            <a href="mailto:jobs@clubjoin.io" style="color: var(--white);">jobs@clubjoin.io</a>
+        </p>
+    </footer>
+</body>
+
+</html>

@@ -14,6 +14,9 @@
     <meta property="og:image" content="https://deinedomain.de/assets/clubjoin_preview.png">
     <meta property="og:url" content="https://deinedomain.de">
 
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+
     <!-- JSON-LD Strukturierte Daten -->
     <script type="application/ld+json">
   {
@@ -104,7 +107,7 @@
             align-items: center;
         }
 
-        .nav-links a {
+        .nav-links a:not(.nav-cta-button) {
             color: var(--dark-gray);
             text-decoration: none;
             font-weight: 500;
@@ -133,20 +136,14 @@
             width: 100%;
         }
 
+
+
         .nav-cta-button {
             background: var(--primary) !important;
             color: var(--white) !important;
             padding: 12px 24px;
             border-radius: 30px;
-            transition: all 0.3s ease;
             font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .nav-cta-button:hover {
-            background: var(--primary-dark) !important;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(220, 71, 75, 0.3);
         }
 
         /* Mobile menu toggle */
@@ -407,7 +404,17 @@
             object-fit: cover;
             object-position: center;
             border-radius: 35px;
-            transition: transform 0.3s ease;
+            transition: all 0.6s ease;
+        }
+
+        .phone-screenshot {
+            opacity: 1;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .phone-screenshot.fade-out {
+            opacity: 0;
+            transform: scale(0.95);
         }
 
         .phone-mockup:hover .phone-screen img {
@@ -740,7 +747,7 @@
             object-fit: cover;
             object-position: center;
             border-radius: 25px;
-            transition: transform 0.3s ease;
+            transition: all 0.6s ease;
         }
 
         .preview-phone:hover .preview-phone-screen img {
@@ -1366,9 +1373,12 @@
             <img src="assets/logo-group.svg" alt="ClubJoin Logo">
         </div>
         <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#preview">App</a></li>
-            <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="karriere.html">Karriere</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="about.html">Über mich</a></li>
             <li><a href="#signup" class="nav-cta-button">Früh-Zugang</a></li>
         </ul>
         <div class="mobile-menu-toggle">
@@ -1407,7 +1417,7 @@
             <div class="hero-visual">
                 <div class="phone-mockup">
                     <div class="phone-screen">
-                        <img width="250" src="assets/search.png">
+                        <img width="250" src="assets/search.png" id="heroPhoneImg" class="phone-screenshot">
                     </div>
                 </div>
             </div>
@@ -1420,7 +1430,7 @@
         <div class="stats-grid">
             <div class="stat-item fade-in">
                 <div class="stat-number live-counter">
-                    <span id="joinerCount">27</span>
+                    <span id="joinerCount">?</span>
                     <div class="stat-pulse"></div>
                 </div>
                 <span class="stat-label">Early Joiner dabei</span>
@@ -1430,7 +1440,7 @@
                 <span class="stat-label">DSGVO-konform</span>
             </div>
             <div class="stat-item fade-in">
-                <span class="stat-number">2025</span>
+                <span class="stat-number">2026</span>
                 <span class="stat-label">Launch geplant</span>
             </div>
         </div>
@@ -1506,7 +1516,7 @@
                 </ul>
 
                 <div class="cta-buttons">
-                    <a href="mailto:info@clubjoin.de" class="btn-primary">
+                    <a href="mailto:info@clubjoin.io" class="btn-primary">
                         Demo anfragen
                     </a>
                 </div>
@@ -1515,13 +1525,12 @@
             <div class="preview-phones">
                 <div class="preview-phone">
                     <div class="preview-phone-screen">
-                        <img width="175" src="assets/club.png">
+                        <img width="175" src="assets/club.png" id="previewPhone1" class="phone-screenshot">
                     </div>
                 </div>
                 <div class="preview-phone">
                     <div class="preview-phone-screen">
-
-                        <img width="175" src="assets/members.png">
+                        <img width="175" src="assets/members.png" id="previewPhone2" class="phone-screenshot">
                     </div>
                 </div>
             </div>
@@ -1592,7 +1601,7 @@
     </section>
 
     <!-- Email Signup Section -->
-    <section id="signup" class="signup-section">
+    <section id="signup" class="final-cta">
         <div class="signup-container">
             <h2>👉 Bereit für die digitale Vereins-Zukunft?</h2>
             <p class="signup-subtitle">
@@ -1653,7 +1662,7 @@
                 <p>Die digitale Zukunft für Vereine. Wir digitalisieren das Vereinswesen und stärken lokale Communities
                     durch moderne Technologie.</p>
                 <div class="social-links">
-                    <a href="mailto:info@clubjoin.de" title="E-Mail">
+                    <a href="mailto:info@clubjoin.io" title="E-Mail">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
                             <path
                                 d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm0 2v.01L12 13 20 6.01V6H4zm0 12h16V8l-8 7-8-7v10z" />
@@ -1680,27 +1689,27 @@
                     <li><a href="#features">Features</a></li>
                     <li><a href="#preview">App Preview</a></li>
                     <li><a href="#roadmap">Roadmap</a></li>
-                    <li><a href="mailto:info@clubjoin.de">Preise</a></li>
+                    <li><a href="mailto:info@clubjoin.io">Preise</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
                 <h4>Unternehmen</h4>
                 <ul>
-                    <li><a href="mailto:info@clubjoin.de">Über uns</a></li>
-                    <li><a href="mailto:info@clubjoin.de">Karriere</a></li>
-                    <li><a href="mailto:info@clubjoin.de">Presse</a></li>
-                    <li><a href="mailto:info@clubjoin.de">Kontakt</a></li>
+                    <li><a href="about.html">Über mich</a></li>
+                    <li><a href="karriere.html">Karriere</a></li>
+                    <li><a href="blog.html">Blog</a></li>
+                    <li><a href="mailto:info@clubjoin.io">Kontakt</a></li>
                 </ul>
             </div>
 
             <div class="footer-column">
                 <h4>Legal</h4>
                 <ul>
-                    <li><a href="mailto:info@clubjoin.de">Datenschutz</a></li>
-                    <li><a href="mailto:info@clubjoin.de">Impressum</a></li>
-                    <li><a href="mailto:info@clubjoin.de">AGB</a></li>
-                    <li><a href="mailto:info@clubjoin.de">Cookie-Policy</a></li>
+                    <li><a href="mailto:info@clubjoin.io">Datenschutz</a></li>
+                    <li><a href="mailto:info@clubjoin.io">Impressum</a></li>
+                    <li><a href="mailto:info@clubjoin.io">AGB</a></li>
+                    <li><a href="mailto:info@clubjoin.io">Cookie-Policy</a></li>
                 </ul>
             </div>
         </div>
@@ -1937,6 +1946,163 @@
                     }, 5000);
                 }
             }
+        });
+
+        // Phone Screenshot Carousel System
+        class PhoneScreenshotManager {
+            constructor() {
+                // Screenshot configurations for different phones
+                this.screenshots = {
+                    hero: [
+                        'assets/search.png',
+                        'assets/club.png',
+                        'assets/members.png'
+                    ],
+                    preview1: [
+                        'assets/club.png',
+                        'assets/members.png',
+                        'assets/search.png'
+                    ],
+                    preview2: [
+                        'assets/members.png',
+                        'assets/search.png',
+                        'assets/club.png'
+                    ]
+                };
+
+                this.currentIndexes = {
+                    hero: 0,
+                    preview1: 0,
+                    preview2: 0
+                };
+
+                this.autoChangeInterval = null;
+                this.lastScrollTime = 0;
+
+                this.init();
+            }
+
+            init() {
+                console.log('🚀 PhoneScreenshotManager initialized!');
+
+                // Scroll-based screenshot changing
+                window.addEventListener('scroll', this.handleScroll.bind(this));
+
+                // Auto-fallback timer (changes every 5 seconds if no scroll)
+                this.startAutoChange();
+
+                // Intersection Observer for more precise control
+                this.setupIntersectionObserver();
+
+                console.log('📱 All phone elements:', {
+                    hero: document.getElementById('heroPhoneImg'),
+                    preview1: document.getElementById('previewPhone1'),
+                    preview2: document.getElementById('previewPhone2')
+                });
+            }
+
+            handleScroll() {
+                this.lastScrollTime = Date.now();
+
+                const scrollY = window.scrollY;
+                const windowHeight = window.innerHeight;
+
+                // Calculate which section we're in based on scroll position
+                const heroEnd = windowHeight * 0.8;
+                const featuresEnd = windowHeight * 1.8;
+                const appPreviewEnd = windowHeight * 2.8;
+
+                if (scrollY < heroEnd) {
+                    // Hero section - show search/dashboard
+                    this.changeScreenshot('hero', 0);
+                    this.changeScreenshot('preview1', 0);
+                    this.changeScreenshot('preview2', 0);
+                } else if (scrollY < featuresEnd) {
+                    // Features section - show club management
+                    this.changeScreenshot('hero', 1);
+                    this.changeScreenshot('preview1', 1);
+                    this.changeScreenshot('preview2', 1);
+                } else if (scrollY < appPreviewEnd) {
+                    // App preview section - show members/community
+                    this.changeScreenshot('hero', 2);
+                    this.changeScreenshot('preview1', 2);
+                    this.changeScreenshot('preview2', 2);
+                }
+            }
+
+            changeScreenshot(phone, index) {
+                if (this.currentIndexes[phone] === index) return;
+
+                const phoneImages = {
+                    hero: document.getElementById('heroPhoneImg'),
+                    preview1: document.getElementById('previewPhone1'),
+                    preview2: document.getElementById('previewPhone2')
+                };
+
+                const img = phoneImages[phone];
+                if (!img) return;
+
+                // Fade out current image
+                img.classList.add('fade-out');
+
+                // Change source and fade back in after transition
+                setTimeout(() => {
+                    img.src = this.screenshots[phone][index];
+                    img.classList.remove('fade-out');
+                    this.currentIndexes[phone] = index;
+                }, 300);
+            }
+
+            startAutoChange() {
+                this.autoChangeInterval = setInterval(() => {
+                    // Only auto-change if user hasn't scrolled recently (5+ seconds)
+                    if (Date.now() - this.lastScrollTime > 5000) {
+                        // Cycle through screenshots automatically
+                        Object.keys(this.currentIndexes).forEach(phone => {
+                            const maxIndex = this.screenshots[phone].length - 1;
+                            const nextIndex = (this.currentIndexes[phone] + 1) % (maxIndex + 1);
+                            this.changeScreenshot(phone, nextIndex);
+                        });
+                    }
+                }, 5000); // Change every 5 seconds
+            }
+
+            setupIntersectionObserver() {
+                const options = {
+                    threshold: 0.3,
+                    rootMargin: '0px'
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const target = entry.target;
+
+                            if (target.id === 'features') {
+                                this.changeScreenshot('hero', 1);
+                                this.changeScreenshot('preview1', 1);
+                                this.changeScreenshot('preview2', 1);
+                            } else if (target.id === 'preview') {
+                                this.changeScreenshot('hero', 2);
+                                this.changeScreenshot('preview1', 2);
+                                this.changeScreenshot('preview2', 2);
+                            }
+                        }
+                    });
+                }, options);
+
+                // Observe key sections
+                const sections = ['features', 'preview'];
+                sections.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    if (section) observer.observe(section);
+                });
+            }
+        }
+
+        // Initialize the screenshot manager when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new PhoneScreenshotManager();
         });
     </script>
 </body>

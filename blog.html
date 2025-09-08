@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="ClubJoin Blog - Insights zur digitalen Transformation von Vereinen, Vereinsmanagement und Community Building.">
+    <meta name="keywords" content="ClubJoin Blog, Vereinsmanagement, Digitalisierung, Community, Vereine">
+    <title>Blog – ClubJoin</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #dc474b;
+            --primary-dark: #b8383b;
+            --primary-light: #ff5a5f;
+            --accent: #6B8E5A;
+            --black: #1A1A1A;
+            --dark-gray: #2D2D2D;
+            --medium-gray: #666666;
+            --light-gray: #E5E5E5;
+            --white: #FFFFFF;
+            --cream: #FAFAFA;
+            --success: #10B981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: var(--white);
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a:not(.nav-cta-button) {
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-links a:not(.nav-cta-button):hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:not(.nav-cta-button)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:not(.nav-cta-button):hover::after {
+            width: 100%;
+        }
+
+        .nav-cta-button {
+            background: var(--primary) !important;
+            color: var(--white) !important;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .nav-cta-button:hover {
+            background: var(--primary-dark) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 71, 75, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 5% 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 80px 5%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 60px;
+            text-align: center;
+            color: var(--primary);
+        }
+
+        /* Blog Grid */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-bottom: 80px;
+        }
+
+        .blog-card {
+            background: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .blog-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-image {
+            width: 100%;
+            height: 280px;
+            background: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--medium-gray);
+            overflow: hidden;
+            position: relative;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .blog-card:hover .blog-image img {
+            transform: scale(1.08);
+        }
+
+        .blog-content {
+            padding: 30px;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: var(--medium-gray);
+        }
+
+        .blog-tag {
+            background: var(--cream);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .blog-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--black);
+            font-weight: 700;
+        }
+
+        .blog-card p {
+            color: var(--medium-gray);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .read-more {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .read-more:hover {
+            color: var(--primary-dark);
+            gap: 10px;
+        }
+
+        /* Coming Soon */
+        .coming-soon {
+            background: var(--cream);
+            padding: 80px 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin: 60px 0;
+        }
+
+        .coming-soon h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--black);
+        }
+
+        .coming-soon p {
+            font-size: 1.1rem;
+            color: var(--medium-gray);
+            margin-bottom: 30px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .newsletter-signup {
+            display: flex;
+            gap: 15px;
+            max-width: 400px;
+            margin: 0 auto;
+            background: var(--white);
+            padding: 5px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .newsletter-signup input {
+            flex: 1;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 50px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .newsletter-signup button {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-signup button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .subscribe-button {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .subscribe-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(220, 71, 75, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 40px 5%;
+            text-align: center;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: var(--white);
+            margin: 10% auto;
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease;
+            text-align: center;
+        }
+
+        .close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: var(--medium-gray);
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close:hover {
+            background: var(--light-gray);
+            color: var(--black);
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .modal h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .modal p {
+            color: var(--medium-gray);
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .modal-cta {
+            background: var(--primary);
+            color: var(--white);
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .modal-cta:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content {
+                padding: 60px 5%;
+            }
+
+            .newsletter-signup {
+                flex-direction: column;
+                max-width: 300px;
+            }
+
+            .newsletter-signup button {
+                margin-top: 10px;
+            }
+
+            .modal-content {
+                margin: 20% auto;
+                padding: 30px 20px;
+                width: 95%;
+            }
+
+            .modal h2 {
+                font-size: 1.5rem;
+            }
+
+            .modal-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="logo">
+            <img src="assets/logo-group.svg" alt="ClubJoin Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="index.html#preview">App</a></li>
+            <li><a href="karriere.html">Karriere</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="about.html">Über mich</a></li>
+            <li><a href="index.html#signup" class="nav-cta-button">Früh-Zugang</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>ClubJoin Blog</h1>
+        <p class="subtitle">
+            Insights zur digitalen Transformation von Vereinen und Community Building
+        </p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h2 class="section-title">Neueste Artikel</h2>
+
+        <!-- Blog Grid -->
+        <div class="blog-grid">
+            <!-- <article class="blog-card" onclick="openModal('modal1')">
+                <div class="blog-image">
+                    📱
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-tag">Digitalisierung</span>
+                        <span>15. Januar 2025</span>
+                    </div>
+                    <h3>Die Zukunft der Vereinsdigitalisierung</h3>
+                    <p>Warum 2025 das Jahr wird, in dem Vereine endlich digital werden müssen. Von WhatsApp-Chaos zu professionellen Lösungen.</p>
+                    <a href="#" class="read-more" onclick="event.stopPropagation(); openModal('modal1')">Weiterlesen →</a>
+                </div>
+            </article> -->
+
+            <article class="blog-card" onclick="window.location='blog-familienvater.html'">
+                <div class="blog-image">
+                    <img src="assets/blog-familienvater.jpeg" alt="Familienvater im Vereins-Dschungel">
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-tag">Familie</span>
+                        <span>12. Januar 2025</span>
+                    </div>
+                    <h3>Als Familienvater im Vereins-Dschungel</h3>
+                    <p>Persönliche Einblicke: Wie steinzeitliche Vereinsprozesse Familien belasten und was sich ändern
+                        muss.</p>
+                    <a href="blog-familienvater.html" class="read-more">Weiterlesen →</a>
+                </div>
+            </article>
+
+            <article class="blog-card" onclick="openModal('modal3')">
+                <div class="blog-image">
+                    🚀
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-tag">Startup</span>
+                        <span>8. Januar 2025</span>
+                    </div>
+                    <h3>Von der Idee zur App: Die ClubJoin Story</h3>
+                    <p>Wie aus persönlicher Frustration mit Vereinsprozessen die Vision für ClubJoin entstand.</p>
+                    <a href="#" class="read-more" onclick="event.stopPropagation(); openModal('modal3')">Weiterlesen
+                        →</a>
+                </div>
+            </article>
+            <!-- 
+            <article class="blog-card" onclick="openModal('modal4')">
+                <div class="blog-image">
+                    🔒
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-tag">DSGVO</span>
+                        <span>5. Januar 2025</span>
+                    </div>
+                    <h3>DSGVO für Vereine: Was wirklich wichtig ist</h3>
+                    <p>Datenschutz in Vereinen ohne Panik: Praktische Tipps für DSGVO-konformes Vereinsmanagement.</p>
+                    <a href="#" class="read-more" onclick="event.stopPropagation(); openModal('modal4')">Weiterlesen →</a>
+                </div>
+            </article>
+
+            <article class="blog-card" onclick="openModal('modal5')">
+                <div class="blog-image">
+                    🤝
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-tag">Community</span>
+                        <span>2. Januar 2025</span>
+                    </div>
+                    <h3>Community Building in der digitalen Ära</h3>
+                    <p>Wie Vereine durch digitale Tools ihre Community stärken und neue Mitglieder gewinnen können.</p>
+                    <a href="#" class="read-more" onclick="event.stopPropagation(); openModal('modal5')">Weiterlesen →</a>
+                </div>
+            </article>
+
+            <article class="blog-card" onclick="openModal('modal6')">
+                <div class="blog-image">
+                    ⚡
+                </div>
+                <div class="blog-content">
+                    <div class="blog-meta">
+                        <span class="blog-tag">Effizienz</span>
+                        <span>30. Dezember 2024</span>
+                    </div>
+                    <h3>Schluss mit Zettelwirtschaft</h3>
+                    <p>5 einfache Schritte, wie Vereine sofort effizienter werden können - auch ohne neue Software.</p>
+                    <a href="#" class="read-more" onclick="event.stopPropagation(); openModal('modal6')">Weiterlesen →</a>
+                </div>
+            </article> -->
+        </div>
+
+        <!-- Coming Soon Section -->
+        <section class="coming-soon">
+            <h2>📝 Mehr Inhalte folgen bald!</h2>
+            <p>
+                Wir arbeiten an spannenden Artikeln über Vereinsdigitalisierung, Community Management und
+                persönlichen Erfahrungen aus der Startup-Welt. Bleib auf dem Laufenden!
+            </p>
+            <a href="index.html#signup" class="subscribe-button">Abonnieren</a>
+        </section>
+    </main>
+
+    <!-- Modals -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal1')">&times;</span>
+            <div class="modal-icon">📱</div>
+            <h2>Coming Soon!</h2>
+            <p>Dieser Artikel über die Zukunft der Vereinsdigitalisierung wird bald verfügbar sein. Wir arbeiten bereits
+                daran!</p>
+            <a href="index.html#signup" class="modal-cta">Früh-Zugang sichern</a>
+        </div>
+    </div>
+
+
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal3')">&times;</span>
+            <div class="modal-icon">🚀</div>
+            <h2>Coming Soon!</h2>
+            <p>Die komplette ClubJoin Story - von der ersten Idee bis zur App. Bald hier zu lesen!</p>
+            <a href="about.html" class="modal-cta">Über den Gründer</a>
+        </div>
+    </div>
+
+    <div id="modal4" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal4')">&times;</span>
+            <div class="modal-icon">🔒</div>
+            <h2>Coming Soon!</h2>
+            <p>DSGVO für Vereine einfach erklärt - praktische Tipps ohne Panik. Artikel folgt bald!</p>
+            <a href="index.html#features" class="modal-cta">Datenschutz Features</a>
+        </div>
+    </div>
+
+    <div id="modal5" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal5')">&times;</span>
+            <div class="modal-icon">🤝</div>
+            <h2>Coming Soon!</h2>
+            <p>Community Building in der digitalen Ära - wie Vereine ihre Mitglieder digital erreichen. Bald verfügbar!
+            </p>
+            <a href="index.html#features" class="modal-cta">Community Features</a>
+        </div>
+    </div>
+
+    <div id="modal6" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal6')">&times;</span>
+            <div class="modal-icon">⚡</div>
+            <h2>Coming Soon!</h2>
+            <p>5 Sofort-Tipps gegen Zettelwirtschaft - auch ohne neue Software. Artikel kommt bald!</p>
+            <a href="index.html#features" class="modal-cta">Effizienz Features</a>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 ClubJoin. Made with ❤️ for Communities.</p>
+        <p style="margin-top: 10px; opacity: 0.8;">
+            <a href="index.html" style="color: var(--white); margin-right: 20px;">Zurück zur Hauptseite</a>
+            <a href="mailto:andreas@clubjoin.io" style="color: var(--white);">andreas@clubjoin.io</a>
+        </p>
+    </footer>
+
+    <script>
+        // Modal functionality
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto'; // Re-enable scrolling
+        }
+
+        // Close modal when clicking outside of it
+        window.onclick = function (event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+        }
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape') {
+                const modals = document.querySelectorAll('.modal');
+                modals.forEach(modal => {
+                    if (modal.style.display === 'block') {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

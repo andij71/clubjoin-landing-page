@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Über Andreas Junemann - Gründer und Entwickler von ClubJoin. Electrical Engineer mit Master in Embedded Systems.">
+    <meta name="keywords" content="Andreas Junemann, ClubJoin, Electrical Engineer, Embedded Systems, Gründer">
+    <title>Über mich – Andreas Junemann | ClubJoin</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #dc474b;
+            --primary-dark: #b8383b;
+            --primary-light: #ff5a5f;
+            --accent: #6B8E5A;
+            --black: #1A1A1A;
+            --dark-gray: #2D2D2D;
+            --medium-gray: #666666;
+            --light-gray: #E5E5E5;
+            --white: #FFFFFF;
+            --cream: #FAFAFA;
+            --success: #10B981;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: var(--white);
+        }
+
+        /* Navigation */
+        .nav-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 5%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo img {
+            width: 120px;
+            height: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a:not(.nav-cta-button) {
+            color: var(--dark-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 8px 0;
+        }
+
+        .nav-links a:not(.nav-cta-button):hover {
+            color: var(--primary);
+        }
+
+        .nav-links a:not(.nav-cta-button)::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:not(.nav-cta-button):hover::after {
+            width: 100%;
+        }
+
+        .nav-cta-button {
+            background: var(--primary) !important;
+            color: var(--white) !important;
+            padding: 14px 28px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .nav-cta-button:hover {
+            background: var(--primary-dark) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(220, 71, 75, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 120px 5% 80px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 24px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 80px 5%;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .about-section {
+            margin-bottom: 60px;
+        }
+
+        .about-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .profile-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin: 0 auto 30px;
+            background: var(--cream);
+            border: 4px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--primary);
+            overflow: hidden;
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            color: var(--primary);
+        }
+
+        .intro-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--dark-gray);
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 40px;
+        }
+
+        /* Education & Experience */
+        .credentials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin: 60px 0;
+        }
+
+        .credential-card {
+            background: var(--white);
+            border: 2px solid var(--light-gray);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .credential-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .credential-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .credential-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: var(--black);
+        }
+
+        .credential-card p {
+            color: var(--medium-gray);
+            line-height: 1.6;
+        }
+
+        .degree {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        /* Vision Section */
+        .vision-section {
+            background: var(--cream);
+            padding: 80px 40px;
+            border-radius: 20px;
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .vision-section h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--black);
+        }
+
+        .vision-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--dark-gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Skills */
+        .skills-section {
+            margin: 60px 0;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .skill-item {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid var(--light-gray);
+            text-align: center;
+        }
+
+        .skill-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .skill-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--black);
+        }
+
+        .skill-item p {
+            color: var(--medium-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Contact CTA */
+        .contact-cta {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 60px 40px;
+            border-radius: 20px;
+            text-align: center;
+        }
+
+        .contact-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: var(--white);
+            color: var(--primary);
+            padding: 18px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 40px 5%;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .credentials-grid,
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content {
+                padding: 60px 5%;
+            }
+
+            .profile-image {
+                width: 150px;
+                height: 150px;
+                font-size: 3rem;
+            }
+
+            .profile-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav-container">
+        <div class="logo">
+            <img src="assets/logo-group.svg" alt="ClubJoin Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#features">Features</a></li>
+            <li><a href="index.html#preview">App</a></li>
+            <li><a href="karriere.html">Karriere</a></li>
+            <li><a href="blog.html">Blog</a></li>
+            <li><a href="about.html">Über mich</a></li>
+            <li><a href="index.html#signup" class="nav-cta-button">Früh-Zugang</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Über mich</h1>
+        <p class="subtitle">
+            Der Kopf hinter ClubJoin – Von der Technik zur digitalen Vereins-Revolution
+        </p>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- About Header -->
+        <section class="about-header">
+            <div class="profile-image">
+                <img width="175" src="assets/me.png">
+            </div>
+            <h2 class="section-title">Andreas Junemann</h2>
+            <p class="intro-text">
+                Als zweifacher Familienvater und Electrical Engineer mit Master in Embedded Systems erlebe ich täglich,
+                wie wichtig Vereine und Freizeitaktivitäten für unser Familienleben sind. Sie sind der Dreh- und
+                Angelpunkt unseres Alltags – doch die Prozesse dahinter sind oft noch steinzeitlich. Mit ClubJoin
+                verbinde ich meine technische Expertise mit echter Lebenserfahrung als Vereinsmitglied und -nutzer.
+            </p>
+        </section>
+
+        <!-- Education & Background -->
+        <section class="about-section">
+            <h2 class="section-title" style="text-align: center;">Ausbildung & Hintergrund</h2>
+            <div class="credentials-grid">
+                <div class="credential-card">
+                    <span class="credential-icon">🎓</span>
+                    <h3>Bachelor of Engineering</h3>
+                    <p class="degree">Electrical Engineering</p>
+                    <p>Fundierte Grundlagen in Elektrotechnik, Schaltungsdesign und technischen Systemen.
+                        Diese Ausbildung schuf die Basis für mein Verständnis komplexer technischer Zusammenhänge.</p>
+                </div>
+                <div class="credential-card">
+                    <span class="credential-icon">🔧</span>
+                    <h3>Master of Science</h3>
+                    <p class="degree">Embedded Systems</p>
+                    <p>Spezialisierung auf eingebettete Systeme, Mikrocontroller und IoT-Technologien.
+                        Hier entwickelte ich die Expertise für hardwarenahe Programmierung und Systemarchitektur.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Personal Experience -->
+        <section class="about-section">
+            <h2 class="section-title" style="text-align: center;">Familienvater & Vereinsnutzer</h2>
+            <div class="credentials-grid">
+                <div class="credential-card">
+                    <span class="credential-icon">👨‍👩‍👧‍👦</span>
+                    <h3>Zweifacher Familienvater</h3>
+                    <p>Vereine und Freizeitaktivitäten sind der <strong>Dreh- und Angelpunkt</strong> in unserem
+                        Familienleben.
+                        Von Sportverein bis Musikschule – ich kenne die täglichen Herausforderungen von Anmeldungen,
+                        Terminen und Kommunikation aus erster Hand.</p>
+                </div>
+                <div class="credential-card">
+                    <span class="credential-icon">🏃‍♂️</span>
+                    <h3>Aktives Vereinsmitglied</h3>
+                    <p>Nicht nur Entwickler, sondern auch Nutzer: Ich erlebe täglich die <strong>steinzeitlichen
+                            Prozesse</strong>
+                        im Vereinswesen – von WhatsApp-Chaos bis hin zu Papierkram. Diese Erfahrung fließt direkt in
+                        die Entwicklung von ClubJoin ein.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Vision -->
+        <section class="vision-section">
+            <h2>Meine Vision für ClubJoin</h2>
+            <p class="vision-text">
+                Als Vater von zwei Kindern stehe ich ständig vor den gleichen Herausforderungen wie andere Eltern:
+                Anmeldungen per Zettel, WhatsApp-Gruppen ohne Ende, verpasste Termine und chaotische Kommunikation.
+                Vereine sind das Herzstück unserer Gesellschaft und des Familienlebens – doch die Prozesse sind oft
+                noch aus den 90ern. Mit ClubJoin möchte ich eine Plattform schaffen, die das Vereinsleben nicht nur
+                für Vorstände, sondern auch für Familien wie meine revolutioniert. Digitale Lösungen, die wirklich
+                im Alltag funktionieren.
+            </p>
+        </section>
+
+        <!-- Skills -->
+        <section class="skills-section">
+            <h2 class="section-title" style="text-align: center;">Technische Expertise</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <span class="icon">⚡</span>
+                    <h4>Embedded Systems</h4>
+                    <p>Mikrocontroller, IoT, Hardware-Software-Integration</p>
+                </div>
+                <div class="skill-item">
+                    <span class="icon">💻</span>
+                    <h4>Software Development</h4>
+                    <p>Full-Stack Development, Database Design, API Architecture</p>
+                </div>
+                <div class="skill-item">
+                    <span class="icon">🔒</span>
+                    <h4>Security & DSGVO</h4>
+                    <p>Datenschutz, Verschlüsselung, Compliance</p>
+                </div>
+                <div class="skill-item">
+                    <span class="icon">📊</span>
+                    <h4>System Architecture</h4>
+                    <p>Skalierbare Systeme, Cloud Computing, Performance</p>
+                </div>
+                <div class="skill-item">
+                    <span class="icon">🚀</span>
+                    <h4>Innovation</h4>
+                    <p>Neue Technologien, Prozessoptimierung, User Experience</p>
+                </div>
+                <div class="skill-item">
+                    <span class="icon">🤝</span>
+                    <h4>Community Building</h4>
+                    <p>Vereinsverständnis, Digitale Transformation, Benutzerorientierung</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact CTA -->
+        <section class="contact-cta">
+            <h2>Lass uns reden!</h2>
+            <p>
+                Du hast Fragen zu ClubJoin, Feedback oder möchtest einfach mehr über das Projekt erfahren?
+                Ich freue mich auf den Austausch!
+            </p>
+            <a href="mailto:andreas@clubjoin.io" class="cta-button">
+                Kontakt aufnehmen
+            </a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 ClubJoin. Made with ❤️ for Communities.</p>
+        <p style="margin-top: 10px; opacity: 0.8;">
+            <a href="index.html" style="color: var(--white); margin-right: 20px;">Zurück zur Hauptseite</a>
+            <a href="mailto:andreas@clubjoin.io" style="color: var(--white);">andreas@clubjoin.io</a>
+        </p>
+    </footer>
+</body>
+
+</html>
