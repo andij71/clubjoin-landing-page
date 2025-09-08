@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Email-Verifizierung für ClubJoin Early Access">
+    <title>Email bestätigen – ClubJoin</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #dc474b;
+            --primary-dark: #b8383b;
+            --black: #1A1A1A;
+            --dark-gray: #2D2D2D;
+            --medium-gray: #666666;
+            --light-gray: #E5E5E5;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-gray);
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .verify-container {
+            max-width: 500px;
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--light-gray);
+        }
+
+        .verify-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--black);
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: var(--medium-gray);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .status-message {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .success {
+            background: #f0fdf4;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .error {
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .loading {
+            background: #f8fafc;
+            color: var(--medium-gray);
+            border: 1px solid var(--light-gray);
+        }
+
+        .home-button {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .home-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="verify-container">
+        <div class="verify-icon">📧</div>
+        <h1>Email bestätigen</h1>
+        
+        <div id="statusMessage" class="status-message loading">
+            <div class="spinner"></div>
+            Deine Email wird verifiziert...
+        </div>
+        
+        <p id="statusText">
+            Bitte warte, während wir deine Email-Adresse bestätigen.
+        </p>
+
+        <a href="index.html" class="home-button" id="homeButton" style="display: none;">
+            Zurück zur Startseite
+        </a>
+    </div>
+
+    <script>
+        // Supabase Configuration (same as index.html)
+        const SUPABASE_URL = 'https://onhnpxenhsebpmxyvaah.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9uaG5weGVuaHNlYnBteHl2YWFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcyNzA2ODEsImV4cCI6MjA3Mjg0NjY4MX0.JnxdioSmWR72KXxCl2KyNPD2FILSqdmeaZfjUdi7bwE'
+
+        let supabase = null;
+        let isSupabaseEnabled = false;
+
+        try {
+            if (typeof window.supabase !== 'undefined') {
+                supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                isSupabaseEnabled = true;
+                console.log('✅ Supabase initialized for verification');
+            } else {
+                showError('Email-Verifizierung ist nur mit Supabase verfügbar.');
+            }
+        } catch (error) {
+            console.error('❌ Supabase initialization failed:', error);
+            showError('Technischer Fehler bei der Initialisierung.');
+        }
+
+        function showSuccess(message) {
+            const statusMessage = document.getElementById('statusMessage');
+            const statusText = document.getElementById('statusText');
+            const homeButton = document.getElementById('homeButton');
+
+            statusMessage.className = 'status-message success';
+            statusMessage.innerHTML = '✅ ' + message;
+            statusText.textContent = 'Du wirst jetzt über alle wichtigen ClubJoin Updates informiert.';
+            homeButton.style.display = 'inline-block';
+        }
+
+        function showError(message) {
+            const statusMessage = document.getElementById('statusMessage');
+            const statusText = document.getElementById('statusText');
+            const homeButton = document.getElementById('homeButton');
+
+            statusMessage.className = 'status-message error';
+            statusMessage.innerHTML = '❌ ' + message;
+            statusText.textContent = 'Versuche es erneut oder kontaktiere uns bei anhaltenden Problemen.';
+            homeButton.style.display = 'inline-block';
+        }
+
+        async function verifyEmail() {
+            if (!isSupabaseEnabled) {
+                showError('Email-Verifizierung ist nicht konfiguriert.');
+                return;
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+
+            if (!token) {
+                showError('Ungültiger oder fehlender Verifizierungs-Token.');
+                return;
+            }
+
+            try {
+                // Update verification status using secure function
+                const { data, error } = await supabase
+                    .rpc('verify_email', { token_param: token });
+
+                if (error) {
+                    console.error('Verification error:', error);
+                    showError('Verifizierung fehlgeschlagen. Bitte kontaktiere den Support.');
+                } else if (data === true) {
+                    showSuccess('Email erfolgreich bestätigt!');
+                } else {
+                    showError('Token ungültig oder bereits verwendet.');
+                }
+            } catch (error) {
+                console.error('Unexpected error:', error);
+                showError('Ein unerwarteter Fehler ist aufgetreten.');
+            }
+        }
+
+        // Start verification on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            verifyEmail();
+        });
+    </script>
+</body>
+</html>
